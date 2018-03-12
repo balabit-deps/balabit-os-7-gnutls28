@@ -1,0 +1,5 @@
+14_version_gettextcat.diff
+30_guile-snarf.diff
+35_modernize_gtkdoc.diff
+add-openssl-test-link.patch
+disable_global_init_override_test.patch

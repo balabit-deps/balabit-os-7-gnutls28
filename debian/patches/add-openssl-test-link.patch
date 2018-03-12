@@ -1,0 +1,14 @@
+Description: avoid link failure because of missing ssl
+Author: Gianfranco Costamagna <locutusofborg@debian.org>
+
+--- a/tests/slow/Makefile.am
++++ b/tests/slow/Makefile.am
+@@ -57,7 +57,7 @@ check_PROGRAMS = $(ctests) cipher-test c
+ TESTS = $(ctests) test-ciphers.sh override-ciphers test-hash-large.sh
+ 
+ if HAVE_LIBCRYPTO
+-cipher_openssl_compat_LDFLAGS = $(LDADD) $(LIBCRYPTO)
++cipher_openssl_compat_LDADD = $(LDADD) $(LIBCRYPTO)
+ 
+ dist_check_SCRIPTS += test-ciphers-openssl.sh
+ check_PROGRAMS += cipher-openssl-compat
