@@ -3,3 +3,11 @@
 35_modernize_gtkdoc.diff
 add-openssl-test-link.patch
 disable_global_init_override_test.patch
+CVE-2018-1084x-1.patch
+CVE-2018-1084x-2.patch
+CVE-2018-1084x-3.patch
+CVE-2018-1084x-4.patch
+CVE-2018-1084x-5.patch
+CVE-2019-3829-1.patch
+CVE-2019-3829-2.patch
+CVE-2019-3829-3.patch

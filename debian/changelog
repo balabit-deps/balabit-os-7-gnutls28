@@ -1,3 +1,31 @@
+gnutls28 (3.5.18-1ubuntu1.1) bionic-security; urgency=medium
+
+  * SECURITY UPDATE: Lucky-13 issues
+    - debian/patches/CVE-2018-1084x-1.patch: correctly account the length
+      field in SHA384 HMAC in lib/algorithms/mac.c, lib/cipher.c.
+    - debian/patches/CVE-2018-1084x-2.patch: always hash the same amount of
+      blocks that would have been on minimum pad in lib/cipher.c.
+    - debian/patches/CVE-2018-1084x-3.patch: require minimum padding under
+      SSL3.0 in lib/cipher.c.
+    - debian/patches/CVE-2018-1084x-4.patch: hmac-sha384 and sha256
+      ciphersuites were removed from defaults in lib/priority.c,
+      tests/dtls1-2-mtu-check.c, tests/priorities.c.
+    - debian/patches/CVE-2018-1084x-5.patch: fix test for SHA512 in
+      tests/pkcs12_encode.c.
+    - CVE-2018-10844
+    - CVE-2018-10845
+    - CVE-2018-10846
+  * SECURITY UPDATE: double free in cert verification API
+    - debian/patches/CVE-2019-3829-1.patch: automatically NULLify after
+      gnutls_free() in lib/includes/gnutls/gnutls.h.in.
+    - debian/patches/CVE-2019-3829-2.patch: fix some casts in
+      lib/extensions.c.
+    - debian/patches/CVE-2019-3829-3.patch: fix dereference of NULL pointer
+      in lib/x509/x509.c.
+    - CVE-2019-3829
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 28 May 2019 13:18:12 -0400
+
 gnutls28 (3.5.18-1ubuntu1) bionic; urgency=low
 
   * Merge from Debian unstable.  Remaining changes:
