@@ -1,0 +1,87 @@
+Backport of:
+
+From ca1257c02163f21d3d6b4d421a3355e34a8f27b1 Mon Sep 17 00:00:00 2001
+From: Nikos Mavrogiannopoulos <nmav@redhat.com>
+Date: Thu, 20 Jul 2017 12:41:47 +0200
+Subject: [PATCH] gnutls_sign_is_secure2: introduced
+
+This function exports the ability to check the validity of
+a signature algorithm for signing certificates.
+
+That also introduces the flag GNUTLS_SIGN_FLAG_SECURE_FOR_CERTS
+which when specified will cause the function to return whether
+the algorithm is secure for signing certificates.
+
+Signed-off-by: Nikos Mavrogiannopoulos <nmav@redhat.com>
+---
+ lib/algorithms/sign.c           | 22 +++++++++++++++++++---
+ lib/includes/gnutls/gnutls.h.in |  9 ++++++++-
+ lib/libgnutls.map               |  1 +
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+
+--- a/lib/algorithms/sign.c
++++ b/lib/algorithms/sign.c
+@@ -161,7 +161,19 @@ const char *gnutls_sign_get_name(gnutls_
+  *
+  * Returns: Non-zero if the provided signature algorithm is considered to be secure.
+  **/
+-int gnutls_sign_is_secure(gnutls_sign_algorithm_t algorithm)
++unsigned gnutls_sign_is_secure(gnutls_sign_algorithm_t algorithm)
++{
++	return gnutls_sign_is_secure2(algorithm, 0);
++}
++
++/**
++ * gnutls_sign_is_secure2:
++ * @algorithm: is a sign algorithm
++ * @flags: zero or %GNUTLS_SIGN_FLAG_SECURE_FOR_CERTS
++ *
++ * Returns: Non-zero if the provided signature algorithm is considered to be secure.
++ **/
++unsigned gnutls_sign_is_secure2(gnutls_sign_algorithm_t algorithm, unsigned int flags)
+ {
+ 	gnutls_sign_algorithm_t sign = algorithm;
+ 	gnutls_digest_algorithm_t dig = GNUTLS_DIG_UNKNOWN;
+@@ -169,8 +181,12 @@ int gnutls_sign_is_secure(gnutls_sign_al
+ 	/* avoid prefix */
+ 	GNUTLS_SIGN_ALG_LOOP(dig = p->mac);
+ 
+-	if (dig != GNUTLS_DIG_UNKNOWN)
+-		return _gnutls_digest_is_secure(hash_to_entry(dig));
++	if (dig != GNUTLS_DIG_UNKNOWN) {
++		if (flags & GNUTLS_SIGN_FLAG_SECURE_FOR_CERTS)
++			return _gnutls_digest_is_secure_for_certs(hash_to_entry(dig));
++		else
++			return _gnutls_digest_is_secure(hash_to_entry(dig));
++	}
+ 
+ 	return 0;
+ }
+--- a/lib/includes/gnutls/gnutls.h.in
++++ b/lib/includes/gnutls/gnutls.h.in
+@@ -988,7 +988,14 @@ size_t
+ size_t
+ 	gnutls_mac_get_key_size(gnutls_mac_algorithm_t algorithm) __GNUTLS_CONST__;
+ 
+-int gnutls_sign_is_secure(gnutls_sign_algorithm_t algorithm) __GNUTLS_CONST__;
++unsigned gnutls_sign_is_secure(gnutls_sign_algorithm_t algorithm) __GNUTLS_CONST__;
++
++/* It is possible that a signature algorithm is ok to use for short-lived
++ * data (e.g., to sign a TLS session), but not for data that are long-lived
++ * like certificates. This flag is about checking the security of the algorithm
++ * for long-lived data. */
++#define GNUTLS_SIGN_FLAG_SECURE_FOR_CERTS 1
++unsigned gnutls_sign_is_secure2(gnutls_sign_algorithm_t algorithm, unsigned int flags) __GNUTLS_CONST__;
+ 
+ gnutls_digest_algorithm_t
+ 	gnutls_sign_get_hash_algorithm(gnutls_sign_algorithm_t sign) __GNUTLS_CONST__;
+--- a/lib/libgnutls.map
++++ b/lib/libgnutls.map
+@@ -1134,6 +1134,7 @@ GNUTLS_3_4
+ 	gnutls_utf8_password_normalize;
+ 	gnutls_idna_map;
+ 	gnutls_idna_reverse_map;
++	gnutls_sign_is_secure2;
+  local:
+ 	*;
+ };

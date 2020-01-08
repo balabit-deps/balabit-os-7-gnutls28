@@ -692,6 +692,7 @@ libgnutls.so.30 libgnutls30 #MINVER#
  gnutls_sign_get_name@GNUTLS_3_4 3.5.0
  gnutls_sign_get_oid@GNUTLS_3_4 3.5.0
  gnutls_sign_get_pk_algorithm@GNUTLS_3_4 3.5.0
+ gnutls_sign_is_secure2@GNUTLS_3_4 3.5.18-1ubuntu1.2
  gnutls_sign_is_secure@GNUTLS_3_4 3.5.0
  gnutls_sign_list@GNUTLS_3_4 3.5.0
  gnutls_srp_1024_group_generator@GNUTLS_3_4 3.5.0
