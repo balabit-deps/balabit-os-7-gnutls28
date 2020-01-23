@@ -22,3 +22,5 @@ insecuresha1-8.patch
 insecuresha1-9.patch
 insecuresha1-10.patch
 insecuresha1-11.patch
+allow_broken_priority_string.patch
+allow_sha1_priority_string.patch
